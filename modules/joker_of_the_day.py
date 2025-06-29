@@ -59,8 +59,9 @@ async def send_private(bot, ctx):
 
 async def loop(bot):
     while True:
-        # hours = (datetime.now(timezone.utc) - timedelta(hours=11)).hour
+        # hours = (datetime.now(timezone.utc) - timedelta(hours=15)).hour
         hours = datetime.now(timezone.utc).hour
+        print(hours)
         if hours == 0:
             await send_all(bot)
 
