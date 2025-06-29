@@ -88,6 +88,12 @@ def start_bot():
         else:
             await ctx.respond("You're not the server owner!", ephemeral=True)
 
+    @bot.command(description="Get Joker of the Day", ephemeral=True)
+    async def jotd(
+        ctx
+    ):
+        await joker_of_the_day.send_private(bot, ctx)
+
     bot.run(token)
 
 if __name__ == '__main__':

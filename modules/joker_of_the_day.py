@@ -13,10 +13,20 @@ def get_id():
     random_num = random.randrange(0, len(jokers.jokers_list))
     return random_num
 
-async def send_all(bot):
-    joker_id = get_id()
-    joker_element = jokers.jokers_list[joker_id]
+def get_embed(joker):
+    embed = discord.Embed(
+        title = f'{joker['Name']}',
+        description = f'{joker['Effect']}',
+        color = discord.Colour.dark_red()
+    )
+    embed.add_field(name="Price", value=f'{joker['Price']}', inline=True)
+    embed.add_field(name="Rarity", value=f'{joker['Rarity']}', inline=True)
+    embed.add_field(name="Unlock Requirement", value=f'{joker['Unlock_Requirement']}', inline=False)
+    embed.set_image(url=joker['Picture'])
 
+    return embed
+
+async def send_all(bot):
     def get_mention_type(mention_type : int):
         if mention_type == 1:
             return '@everyone '
@@ -25,15 +35,9 @@ async def send_all(bot):
         else:
             return ''
 
-    embed = discord.Embed(
-        title = f'{joker_element['Name']}',
-        description = f'{joker_element['Effect']}',
-        color = discord.Colour.dark_red()
+    embed = get_embed(
+        jokers.jokers_list[get_id()]
     )
-    embed.add_field(name="Price", value=f'{joker_element['Price']}', inline=True)
-    embed.add_field(name="Rarity", value=f'{joker_element['Rarity']}', inline=True)
-    embed.add_field(name="Unlock Requirement", value=f'{joker_element['Unlock_Requirement']}', inline=False)
-    embed.set_image(url=joker_element['Picture'])
 
     for guild in database.data:
         if 'mention_type' not in database.data[guild]:
@@ -44,7 +48,14 @@ async def send_all(bot):
 
         database.save()
 
-        print(f'Joker of the day is: {joker_element['Name']}')
+        print(f'Joker of the day is: {jokers.jokers_list[get_id()]['Name']}')
+
+async def send_private(bot, ctx):
+    embed = get_embed(
+        jokers.jokers_list[get_id()]
+    )
+
+    await ctx.respond(f'Joker of the day is...', embed=embed, ephemeral=True)
 
 async def loop(bot):
     while True:

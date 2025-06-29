@@ -1,6 +1,6 @@
 import json
 
-with open('jokers.json', 'r') as file:
+with open('json/jokers.json', 'r') as file:
     jokers = json.load(file)
 
 jokers_list = []
